@@ -1,16 +1,22 @@
 import java.io.IOException;
 import java.io.OutputStream;
 
+import javax.swing.JOptionPane;
+
 public class OrdenScreen extends javax.swing.JFrame {
 
     String hamburguesa;
-    int mesa = 6;
+    Salon salon;
+    int mesa;
     Cliente cliente;
 
-    public OrdenScreen(Cliente cliente) {
+    public OrdenScreen(Cliente cliente, Salon salon, int mesa) {
+        this.mesa = mesa;
         this.cliente = cliente;
+        this.salon = salon;
         setTitle("La Cocina de Icebox - Ordenar");
         initComponents();
+        setVisible(true);
     }     
 
     private void initComponents() {
@@ -241,7 +247,8 @@ public class OrdenScreen extends javax.swing.JFrame {
         HambFactory hf = new HambFactory();
         Hamburguesa h = hf.cocinarHamburguesa(hamburguesa);
         Orden orden = new Orden(mesa, h, h.getPrecio());   
-        cliente.enviarOrden(orden);                           
+        cliente.enviarOrden(orden);
+        JOptionPane.showMessageDialog(this, "Orden realizada con éxito.", "Orden realizada.", JOptionPane.INFORMATION_MESSAGE);
     }                                          
 
     /**

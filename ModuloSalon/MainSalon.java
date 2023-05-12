@@ -1,7 +1,9 @@
+import java.io.IOException;
+
 public class MainSalon{
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
         Cliente c = new Cliente();
-        OrdenScreen os = new OrdenScreen(c);
-        os.setVisible(true);        
+        Salon salon = new Salon(15);
+        OrdenScreen os = new OrdenScreen(c,salon,8);
     }     
 }

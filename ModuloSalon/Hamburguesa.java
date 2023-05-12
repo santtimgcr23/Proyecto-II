@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 //Clase abstracta para implementar el Factory Method para crear las hamburguesas
 
-public abstract class Hamburguesa {
+public abstract class Hamburguesa implements Serializable{
     protected String nombre;
     protected ArrayList<String> ingredientes;
     int precio;
