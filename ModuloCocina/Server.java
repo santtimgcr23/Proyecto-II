@@ -1,13 +1,14 @@
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.net.SocketException;
 
 public class Server {
+    Cocina cocina;
     ServerSocket server;
     Socket socketCliente;
     DataOutputStream salida;
@@ -15,8 +16,10 @@ public class Server {
     ObjectInputStream objReader;
     
 
-    public Server() {
+    public Server(Cocina cocina) throws ClassNotFoundException, IOException {
+        this.cocina = cocina;
         start();
+        recibirOrden();
     }
     
     public void start(){
@@ -39,8 +42,23 @@ public class Server {
             
         }
     }
-    
-    
-    
+
+    public Orden recibirOrden() throws IOException, ClassNotFoundException {
+        while (true){
+            try {
+                InputStream socketOrden = socketCliente.getInputStream();
+                ObjectInputStream recibirOrden = new ObjectInputStream(socketOrden);
+                Orden orden = (Orden) recibirOrden.readObject();
+                cocina.addOrdenes(orden);
+                System.out.println("Orden recibida con exito".toUpperCase());
+                return orden;
+            } catch (SocketException e) {
+                System.out.println("Error en la conexión: " + e.getMessage());
+                break;
+            }
+        }
+        socketCliente.close();
+        return null;
+    }
     
 }

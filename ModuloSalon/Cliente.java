@@ -35,7 +35,6 @@ public class Cliente {
         ObjectOutputStream enviarOrden = new ObjectOutputStream(socketOrden);
         enviarOrden.writeObject(orden);
         System.out.println("Orden enviada con exito".toUpperCase());
-        socket.close();
     }
     
 }

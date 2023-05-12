@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.io.OutputStream;
 
 public class OrdenScreen extends javax.swing.JFrame {
@@ -160,7 +161,12 @@ public class OrdenScreen extends javax.swing.JFrame {
         btnOrdenar.setText("ORDENAR");
         btnOrdenar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOrdenarActionPerformed(evt);
+                try {
+                    btnOrdenarActionPerformed(evt);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -231,10 +237,11 @@ public class OrdenScreen extends javax.swing.JFrame {
         lblIngredientes.setText("<html>" + new HambOdin().toString().replaceAll("\n", "<br/>") + "<html>");
     }                                       
 
-    private void btnOrdenarActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnOrdenarActionPerformed(java.awt.event.ActionEvent evt) throws IOException {
         HambFactory hf = new HambFactory();
         Hamburguesa h = hf.cocinarHamburguesa(hamburguesa);
-        Orden orden = new Orden(mesa, h, h.getPrecio());                              
+        Orden orden = new Orden(mesa, h, h.getPrecio());   
+        cliente.enviarOrden(orden);                           
     }                                          
 
     /**
