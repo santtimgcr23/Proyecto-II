@@ -1,5 +1,6 @@
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -67,22 +68,52 @@ public class Server {
     ServerSocket serverSocket;
     Socket socket;
     Cocina cocina;
+    ObjectInputStream entrada;
 
     public Server(Cocina cocina) throws ClassNotFoundException, IOException{
         this.cocina = cocina;
-        start();
+        iniciarServer();
+        recibirOrdenes();
     }
 
-    public void start() throws IOException, ClassNotFoundException{
-        serverSocket = new ServerSocket(9999);
-        while (true){
+    // public void start() throws IOException, ClassNotFoundException{
+    //     serverSocket = new ServerSocket(9999);
+    //     while (true){
+    //         socket = serverSocket.accept();
+    //         ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+    //         Orden orden = (Orden)in.readObject();
+    //         cocina.addOrdenes(orden);
+    //         cocina.printOrdenes();
+    //     }
+    // }
+
+    public void recibirOrdenes() throws IOException, ClassNotFoundException{
+        Thread inputThread = new Thread(() -> {
+            while (true) {
+                try {
+                    entrada = new ObjectInputStream(socket.getInputStream());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    Orden orden = (Orden)entrada.readObject();
+                    cocina.addOrdenes(orden);
+                    cocina.printOrdenes();
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        inputThread.start();
+    }
+
+    public void iniciarServer(){
+        try {
+            serverSocket = new ServerSocket(9999);
+            //acepta el cliente
             socket = serverSocket.accept();
-            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-            Orden orden = (Orden)in.readObject();
-            cocina.addOrdenes(orden);
-            cocina.printOrdenes();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
-
-    
 }

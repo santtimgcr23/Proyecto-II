@@ -24,7 +24,7 @@ public class Factura {
         String s = "\nLA COCINA DE ICEBOX\n";
         s += "ORDEN NÚMERO " + codigo + "";
         s += "\nDETALLES DE LA COMPRA:\n";
-        s += hamb.getNombre() + "PRECIO: $" + hamb.getPrecio();
+        s += hamb.getNombre() + "\nPRECIO: $" + hamb.getPrecio();
         s += "\nTOTAL: $" + precio;
         s += "\n¡GRACIAS POR SU VISITA!";
         return s;
